@@ -1,0 +1,73 @@
+<!-- frontend/device-location.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Submit Device Location & Notify Parent</title>
+  <style>
+    body { font-family: sans-serif; max-width: 400px; margin: 2rem auto; }
+    label { display: block; margin-bottom: 0.5rem; }
+    input { width: 100%; padding: 0.5rem; margin-bottom: 1rem; }
+    button { padding: 0.5rem 1rem; }
+    #status { margin-top: 1rem; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>Submit Device Location & Notify Parent</h1>
+
+  <form id="locationForm">
+    <label for="email">Parent Email</label>
+    <input type="email" id="email" name="email" placeholder="parent@example.com" required />
+
+    <label for="lat">Latitude (e.g. 37.774929°N)</label>
+    <input type="text" id="lat" name="lat" placeholder="Enter latitude" required />
+
+    <label for="lon">Longitude (e.g. 122.419416°W)</label>
+    <input type="text" id="lon" name="lon" placeholder="Enter longitude" required />
+
+    <button type="submit">Send & Notify</button>
+  </form>
+
+  <p id="status"></p>
+
+  <script>
+    document.getElementById('locationForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const statusEl = document.getElementById('status');
+      statusEl.textContent = 'Saving location…';
+
+      const email = document.getElementById('email').value.trim();
+      const lat   = document.getElementById('lat').value.trim();
+      const lon   = document.getElementById('lon').value.trim();
+
+      try {
+        // 1) Save location
+        let resp = await fetch('http://localhost:5000/api/device/location', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lat, lon })
+        });
+        if (!resp.ok) {
+          throw new Error('Save error: ' + await resp.text());
+        }
+        statusEl.textContent = 'Location saved.\nSending email…';
+
+        // 2) Notify parent by email
+        resp = await fetch('http://localhost:5000/api/notify-parent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, lat, lon })
+        });
+        if (!resp.ok) {
+          throw new Error('Email error: ' + await resp.text());
+        }
+
+        statusEl.textContent = '✅ Location saved and email sent!';
+        e.target.reset();
+      } catch (err) {
+        statusEl.textContent = '❌ ' + err.message;
+      }
+    });
+  </script>
+</body>
+</html>
