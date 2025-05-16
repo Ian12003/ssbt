@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header with Logout Button -->
+        <header class="header">
+            <h1>Admin Dashboard</h1>
+            <button id="logoutButton">Logout</button>
+        </header>
+
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <ul>
+                <li><a href="admin-dashboard.html">Home</a></li>
+                <li><a href="upload-student.html">Students</a></li>
+                <li><a href="">Parents</a></li>
+                <li><a href="location.html">Settings</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+    <h1>Student Overview</h1>
+    <div id="studentCards" class="card-container"></div>
+</main>
+
+    </div>
+
+    <script src="scripts/dashboard.js"></script>
+</body>
+</html>
