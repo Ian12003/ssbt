@@ -1,0 +1,158 @@
+/* Full-page styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-rows: 60px auto;
+    grid-template-columns: 250px auto;
+    height: 100%;
+    width: 100%;
+    grid-template-areas:
+        "header header"
+        "sidebar main-content";
+}
+
+/* Header */
+.header {
+    grid-area: header;
+    background: #a445b2;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.header button {
+    padding: 10px 15px;
+    background: #fa4299;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.header button:hover {
+    background: #a445b2;
+}
+
+/* Sidebar */
+.sidebar {
+    grid-area: sidebar;
+    background: #2c2c54;
+    color: white;
+    padding: 20px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar ul li {
+    margin: 15px 0;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.1em;
+    display: block;
+}
+
+.sidebar ul li a:hover {
+    color: #fa4299;
+}
+
+/* Main Content */
+.main-content {
+    grid-area: main-content;
+    padding: 20px;
+    background: #f0f2f5;
+    overflow-y: auto;
+}
+
+.main-content h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.main-content p {
+    color: #666;
+}
+/* Form Styling */
+#addParentForm {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 500px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+#addParentForm label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    color: #333;
+}
+
+#addParentForm input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#addParentForm button {
+    margin-top: 20px;
+    padding: 10px 15px;
+    background: #a445b2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#addParentForm button:hover {
+    background: #fa4299;
+}
+
+#message {
+    margin-top: 15px;
+    color: green;
+    font-weight: bold;
+}
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}
+
+.student-card {
+    background-color: #fff;
+    padding: 20px;
+    width: 250px;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+.student-card h3 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.student-card p {
+    margin: 5px 0;
+}
