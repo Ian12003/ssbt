@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Students</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <style>
+        .upload-container {
+            background-color: #fff;
+            padding: 30px;
+            margin: 50px auto;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .upload-container h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .upload-container input[type="file"] {
+            display: block;
+            margin: 20px auto;
+            padding: 10px;
+        }
+
+        .upload-container button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            border-radius: 4px;
+        }
+
+        .upload-container button:hover {
+            background-color: #0056b3;
+        }
+
+        #responseMsg {
+            text-align: center;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <header class="header">
+            <h1>Admin Dashboard</h1>
+            <button id="logoutButton">Logout</button>
+        </header>
+
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <ul>
+                <li><a href="admin-dashboard.html">Home</a></li>
+                <li><a href="upload-student.html" class="active">Students</a></li>
+                <li><a href="#">Parents</a></li>
+                <li><a href="location.html">Settings</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="upload-container">
+                <h2>Upload Student Excel File</h2>
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <input type="file" name="file" accept=".xlsx" required>
+                    <button type="submit">Upload</button>
+                </form>
+                <p id="responseMsg"></p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.getElementById('logoutButton').addEventListener('click', function () {
+            localStorage.clear();
+            window.location.href = "login.html";
+            history.pushState(null, null, "login.html");
+            window.addEventListener("popstate", function () {
+                history.pushState(null, null, "login.html");
+            });
+        });
+
+        document.getElementById('uploadForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            try {
+                const response = await fetch('http://localhost:5000/api/upload-students', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const msg = await response.text();
+                document.getElementById('responseMsg').innerText = msg;
+            } catch (err) {
+                document.getElementById('responseMsg').innerText = "Upload failed. Please try again.";
+                console.error("Upload Error:", err);
+            }
+        });
+    </script>
+</body>
+</html>
