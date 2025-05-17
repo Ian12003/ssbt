@@ -48,7 +48,7 @@ router.post('/upload-students', upload.single('file'), (req, res) => {
 });
 
 router.get('/students', (req, res) => {
-    const query = 'SELECT name, roll_no, class, contact FROM students';
+    const query = 'SELECT name, roll_no, class, contact, parent_email ,last_lat , last_lon FROM students';
 
     db.query(query, (err, results) => {
         if (err) {

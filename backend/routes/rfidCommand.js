@@ -41,8 +41,21 @@ router.post('/rfid-command', async (req, res) => {
       // 2. Insert location into device_location
       const insertLoc = 'INSERT INTO device_location (lat, lon) VALUES (?, ?)';
       db.query(insertLoc, [lat, lon], err => {
-        if (err) console.error('Error saving location:', err);
+        if (err) {
+          console.error('Error saving location:', err);
+        }
       });
+
+      // 3. Update last known location in students table
+      const updateStudentLoc = 'UPDATE students SET last_lat = ?, last_lon = ? WHERE roll_no = ?';
+      db.query(updateStudentLoc, [lat, lon, roll_no], err => {
+        if (err) {
+          console.error('Error updating student location:', err);
+        } else {
+          console.log('📍 Updated student last location in students table');
+        }
+      });
+
 
       // 3. Notify parent via /api/notify-parent
       try {
