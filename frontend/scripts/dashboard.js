@@ -1,20 +1,9 @@
-document.getElementById("logoutButton").addEventListener("click", function () {
-    localStorage.clear(); // Remove stored data
-    window.location.href = "login.html"; // Redirect to login page
-
-    // Prevent going back to the dashboard after logout
-    history.pushState(null, null, "login.html");
-    window.addEventListener("popstate", function () {
-        history.pushState(null, null, "login.html");
-    });
-});
-
 document.addEventListener("DOMContentLoaded", async function () {
     const token = localStorage.getItem("token");
 
     if (!token) {
-        // If no token is found, redirect to the login page
         window.location.href = "login.html";
+        return;
     }
 
     try {
@@ -22,17 +11,48 @@ document.addEventListener("DOMContentLoaded", async function () {
         const students = await res.json();
 
         const container = document.getElementById('studentCards');
+
+        // Group by class
+        const classGroups = {};
         students.forEach(student => {
-            const card = document.createElement('div');
-            card.className = 'student-card';
-            card.innerHTML = `
-                <h3>${student.name}</h3>
-                <p><strong>Roll No:</strong> ${student.roll_no}</p>
-                <p><strong>Class:</strong> ${student.class}</p>
-                <p><strong>Parent Contact:</strong> ${student.contact}</p>
-            `;
-            container.appendChild(card);
+            if (!classGroups[student.class]) {
+                classGroups[student.class] = [];
+            }
+            classGroups[student.class].push(student);
         });
+
+        for (const className in classGroups) {
+            const classRow = document.createElement('div');
+            classRow.className = 'class-row';
+
+            const header = document.createElement('div');
+            header.className = 'class-header';
+            header.textContent = `Class ${className}`;
+            header.addEventListener('click', () => {
+                studentRow.classList.toggle('visible');
+            });
+            
+
+            const studentRow = document.createElement('div');
+            studentRow.className = 'student-row';
+
+            classGroups[className].forEach(student => {
+                const card = document.createElement('div');
+                card.className = 'student-card';
+                card.innerHTML = `
+                    <h3>${student.name}</h3>
+                    <p><strong>Roll No:</strong> ${student.roll_no}</p>
+                    <p><strong>Class:</strong> ${student.class}</p>
+                    <p><strong>Parent Contact:</strong> ${student.contact}</p>
+                `;
+                studentRow.appendChild(card);
+            });
+
+            classRow.appendChild(header);
+            classRow.appendChild(studentRow);
+            container.appendChild(classRow);
+        }
+
     } catch (err) {
         console.error('Failed to load students:', err);
     }

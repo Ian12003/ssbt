@@ -1,11 +1,10 @@
-// backend/routes/notifyParent.js
-const express    = require('express');
-const router     = express.Router();
-const db         = require('../models/db');        // your callback‑style pool
+const express = require('express');
+const router = express.Router();
+const db = require('../models/db');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
-// --- configure transporter once ---
+// Setup mail transporter
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: parseInt(process.env.SMTP_PORT, 10) || 587,
@@ -18,38 +17,40 @@ const transporter = nodemailer.createTransport({
 
 // POST /api/notify-parent
 router.post('/', (req, res) => {
-  const { email, lat, lon } = req.body;
-  if (!email || !lat || !lon) {
-    return res.status(400).json({ message: 'email, lat, and lon are required' });
+  const { roll_no, lat, lon } = req.body;
+  if (!roll_no || !lat || !lon) {
+    return res.status(400).json({ message: 'roll_no, lat, and lon are required' });
   }
 
-  // 1) Lookup parent by email
-  const sqlFetch = 'SELECT Name, Email FROM parent WHERE Email = ?';
-  db.query(sqlFetch, [email], (err, results) => {
+  const sql = 'SELECT name, parent_email FROM students WHERE roll_no = ?';
+  db.query(sql, [roll_no], (err, results) => {
     if (err) {
-      console.error('DB error fetching parent:', err);
+      console.error('DB error:', err);
       return res.status(500).json({ message: 'Database error', error: err });
     }
+
     if (results.length === 0) {
-      return res.status(404).json({ message: 'Parent not found' });
+      return res.status(404).json({ message: 'Student not found for provided roll number' });
     }
 
-    const { Name, Email } = results[0];
+    const { name, parent_email } = results[0];
     const mapsUrl = `https://www.google.co.in/maps/place/${encodeURIComponent(lat)}+${encodeURIComponent(lon)}`;
 
-    // 2) Send email
+    // Send email
     transporter.sendMail({
       from: process.env.SMTP_FROM || process.env.SMTP_USER,
-      to: Email,
-      subject: `Location Update for ${Name}`,
-      html: `<p>Hello ${Name},</p>
-             <p>Your child’s location: <a href="${mapsUrl}" target="_blank">View on Google Maps</a></p>`
+      to: parent_email,
+      subject: `Location Update for ${name}`,
+      html: `<p>Hello,</p>
+             <p>Your child <strong>${name}</strong> is currently located at: 
+             <a href="${mapsUrl}" target="_blank">View on Google Maps</a></p>`
     }, (mailErr, info) => {
       if (mailErr) {
-        console.error('Mail error:', mailErr);
+        console.error('Email error:', mailErr);
         return res.status(500).json({ message: 'Failed to send email', error: mailErr });
       }
-      res.json({ message: 'Email sent', info });
+
+      res.json({ message: 'Email sent to parent', info });      
     });
   });
 });

@@ -1,4 +1,3 @@
-<!-- frontend/device-location.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +8,8 @@
     label { display: block; margin-bottom: 0.5rem; }
     input { width: 100%; padding: 0.5rem; margin-bottom: 1rem; }
     button { padding: 0.5rem 1rem; }
-    #status { margin-top: 1rem; white-space: pre-wrap; }
+    #status, #commandStatus { margin-top: 1rem; white-space: pre-wrap; }
+    hr { margin: 2rem 0; }
   </style>
 </head>
 <body>
@@ -30,16 +30,37 @@
 
   <p id="status"></p>
 
+  <hr />
+
+  <h2>Send Command to ESP (Test Write Command)</h2>
+  <form id="commandForm">
+    <label for="command">
+      Command (e.g. <code>write:0102030405060708090A0B0C0D0E0F10</code> or <code>write:Hello World</code>)
+    </label>
+    <input 
+      type="text" 
+      id="command" 
+      name="command" 
+      placeholder="write:010203... or write:Hello" 
+      required 
+    />
+    <button type="submit">Send Command</button>
+  </form>
+  
+
+  <p id="commandStatus"></p>
+
   <script>
+    // Location & notify parent form handler
     document.getElementById('locationForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const statusEl = document.getElementById('status');
       statusEl.textContent = 'Saving location…';
-
+  
       const email = document.getElementById('email').value.trim();
       const lat   = document.getElementById('lat').value.trim();
       const lon   = document.getElementById('lon').value.trim();
-
+  
       try {
         // 1) Save location
         let resp = await fetch('http://localhost:5000/api/device/location', {
@@ -51,7 +72,7 @@
           throw new Error('Save error: ' + await resp.text());
         }
         statusEl.textContent = 'Location saved.\nSending email…';
-
+  
         // 2) Notify parent by email
         resp = await fetch('http://localhost:5000/api/notify-parent', {
           method: 'POST',
@@ -61,13 +82,56 @@
         if (!resp.ok) {
           throw new Error('Email error: ' + await resp.text());
         }
-
+  
         statusEl.textContent = '✅ Location saved and email sent!';
         e.target.reset();
       } catch (err) {
         statusEl.textContent = '❌ ' + err.message;
       }
     });
+  
+    // Helper function to convert text to hex string
+    function textToHex(text) {
+      let hex = '';
+      for (let i = 0; i < text.length; i++) {
+        hex += text.charCodeAt(i).toString(16).padStart(2, '0');
+      }
+      return hex.toUpperCase();
+    }
+  
+    // Command to ESP form handler with text-to-hex conversion for write: commands
+    document.getElementById('commandForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const statusEl = document.getElementById('commandStatus');
+      statusEl.textContent = 'Sending command...';
+  
+      let command = document.getElementById('command').value.trim();
+  
+      // If command starts with "write:" and after that is normal text, convert that text to hex
+      if (command.startsWith('write:')) {
+        const textPart = command.slice(6);
+        const hexPart = textToHex(textPart);
+        command = 'write:' + hexPart;
+      }
+  
+      try {
+        const resp = await fetch('http://localhost:5000/api/rfid/set-command', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ command })
+        });
+  
+        if (!resp.ok) {
+          throw new Error('Error: ' + await resp.text());
+        }
+  
+        statusEl.textContent = '✅ Command sent successfully!';
+        e.target.reset();
+      } catch (err) {
+        statusEl.textContent = '❌ ' + err.message;
+      }
+    });
   </script>
+  
 </body>
 </html>

@@ -46,6 +46,7 @@ router.post('/upload-students', upload.single('file'), (req, res) => {
         res.send('Students uploaded successfully');
     });
 });
+
 router.get('/students', (req, res) => {
     const query = 'SELECT name, roll_no, class, contact FROM students';
 
