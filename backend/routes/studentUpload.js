@@ -58,5 +58,43 @@ router.get('/students', (req, res) => {
         res.json(results);
     });
 });
+// PUT route to update student info
+router.put('/update-student/:roll_no', (req, res) => {
+    const rollNo = req.params.roll_no;
+    const { name, contact, class: studentClass, parent_email } = req.body;
+
+    const query = `
+        UPDATE students 
+        SET name = ?, contact = ?, class = ?, parent_email = ?
+        WHERE roll_no = ?
+    `;
+
+    db.query(query, [name, contact, studentClass, parent_email, rollNo], (err, result) => {
+        if (err) {
+            console.error('Update Error:', err);
+            return res.status(500).send('Failed to update student');
+        }
+        res.send('Student updated successfully');
+    });
+});
+// DELETE route to delete student by roll_no
+router.delete('/delete-student/:roll_no', (req, res) => {
+    const rollNo = req.params.roll_no;
+
+    const query = `DELETE FROM students WHERE roll_no = ?`;
+
+    db.query(query, [rollNo], (err, result) => {
+        if (err) {
+            console.error('Delete Error:', err);
+            return res.status(500).send('Failed to delete student');
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).send('Student not found');
+        }
+
+        res.send('Student deleted successfully');
+    });
+});
 
 module.exports = router;
