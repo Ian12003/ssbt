@@ -1,5 +1,5 @@
 
-# 📡 RFID-Based Access/Attendance System
+# 📡 RFID-GPS Based Access/Attendance System
 
 This project integrates an **ESP8266 microcontroller**, an **RFID reader**, and a **Node.js backend** to build a real-time access or attendance management system. The ESP8266 can read/write RFID tags based on commands sent from the backend server over Wi-Fi.
 
