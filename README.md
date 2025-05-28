@@ -21,7 +21,7 @@ This project integrates an **ESP8266 microcontroller**, an **RFID reader**, and 
 | Microcontroller  | ESP8266 (NodeMCU)      |
 | Reader Module    | RC522 RFID Reader      |
 | Backend Server   | Node.js with Express   |
-| Database         | MySQL or MongoDB       |
+| Database         | MySQL                  |
 | Communication    | HTTP / WebSocket       |
 
 ---
