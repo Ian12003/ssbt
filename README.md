@@ -77,6 +77,9 @@ npm start
 ---
 ## 📸 Demo & Screenshots!
 
+### The IoT Device 
+![IOT](https://github.com/user-attachments/assets/148478fa-a6fb-4945-9475-efb1ea453625)
+
 ### 🔐 Login Page
 ![Login](https://github.com/user-attachments/assets/fa48defe-8447-4835-9cd2-27eefff2b5bc)
 
