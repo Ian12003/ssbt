@@ -21,12 +21,15 @@ const upload = multer({ storage: storage });
 // POST route to upload Excel
 router.post('/upload-students', upload.single('file'), (req, res) => {
     const file = req.file;
-
+    
     if (!file) return res.status(400).send('No file uploaded');
 
     const workbook = xlsx.readFile(file.path);
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
     const data = xlsx.utils.sheet_to_json(sheet);
+
+    // console.log(data);
+
 
     const students = data.map(row => [
         row['Roll No'],
@@ -35,6 +38,8 @@ router.post('/upload-students', upload.single('file'), (req, res) => {
         row["Contact"],
         row["Class"]
     ]);
+
+    // console.log("Parsed student data:", students);
 
     const query = `INSERT INTO students ( roll_no, name, parent_email, contact, class) VALUES ?`;
 
@@ -77,6 +82,7 @@ router.put('/update-student/:roll_no', (req, res) => {
         res.send('Student updated successfully');
     });
 });
+
 // DELETE route to delete student by roll_no
 router.delete('/delete-student/:roll_no', (req, res) => {
     const rollNo = req.params.roll_no;

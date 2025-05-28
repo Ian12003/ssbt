@@ -42,7 +42,7 @@ router.post('/', (req, res) => {
       to: parent_email,
       subject: `Location Update for ${name}`,
       html: `<p>Hello,</p>
-             <p>Your child <strong>${name}</strong> is currently located at: 
+             <p>Your child <strong>${name}</strong> has boarded/de-boarded the school bus at: 
              <a href="${mapsUrl}" target="_blank">View on Google Maps</a></p>`
     }, (mailErr, info) => {
       if (mailErr) {

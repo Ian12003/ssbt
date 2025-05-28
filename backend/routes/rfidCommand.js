@@ -27,7 +27,7 @@ router.post('/rfid-command', async (req, res) => {
     lastCommand = `write:${writeCommand}`;
   }
 
-  // 1. Get parent email from DB
+  //Get parent email from DB
   const sql = 'SELECT parent_email FROM students WHERE roll_no = ? LIMIT 1';
   db.query(sql, [roll_no], async (err, results) => {
     if (err) {
@@ -38,7 +38,7 @@ router.post('/rfid-command', async (req, res) => {
       const email = results[0].parent_email;
       console.log(`✅ Found parent email: ${email}`);
 
-      // 2. Insert location into device_location
+      //Insert location into device_location
       const insertLoc = 'INSERT INTO device_location (lat, lon) VALUES (?, ?)';
       db.query(insertLoc, [lat, lon], err => {
         if (err) {
@@ -46,7 +46,7 @@ router.post('/rfid-command', async (req, res) => {
         }
       });
 
-      // 3. Update last known location in students table
+      //Update last known location in students table
       const updateStudentLoc = 'UPDATE students SET last_lat = ?, last_lon = ? WHERE roll_no = ?';
       db.query(updateStudentLoc, [lat, lon, roll_no], err => {
         if (err) {
@@ -56,8 +56,18 @@ router.post('/rfid-command', async (req, res) => {
         }
       });
 
+      //Insert into travel_history
+      const insertHistory = `INSERT INTO travel_history (roll_no, lat, lon) VALUES (?, ?, ?)`;
+      db.query(insertHistory, [roll_no, lat, lon], err => {
+        if (err) {
+          console.error('Error saving travel history:', err);
+        } else {
+          console.log('🗂️ Travel history recorded.');
+        }
+      });
 
-      // 3. Notify parent via /api/notify-parent
+
+      //Notify parent via /api/notify-parent
       try {
         console.log('📧 Notifying parent...');
         await axios.post('http://localhost:5000/api/notify-parent', {
@@ -71,11 +81,14 @@ router.post('/rfid-command', async (req, res) => {
       }
     }
 
-    // 4. Send command back to ESP
+    //Send command back to ESP
     const response = lastCommand || 'read';
     lastCommand = null; // clear it once sent
     res.json({ command: response });
   });
+
+
+
 });
 
 // Manual command from dashboard
@@ -88,5 +101,7 @@ router.post('/set-command', (req, res) => {
   lastCommand = command;
   res.send('✅ Command stored.');
 });
+
+
 
 module.exports = router;

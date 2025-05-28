@@ -2,10 +2,11 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const rfidCommandRoutes = require('./routes/rfidCommand');
+const travelHistoryRoutes = require('./routes/travelHistory');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
@@ -35,3 +36,8 @@ app.listen(PORT, () => {
 });
 
 app.use('/api/rfid', rfidCommandRoutes);
+
+app.use('/sample-files', express.static(path.join(__dirname, 'public/sample-files')));
+
+
+app.use('/api/travel-history', travelHistoryRoutes);

@@ -46,6 +46,21 @@
             margin-top: 20px;
             font-weight: bold;
         }
+
+        .download-link {
+    display: inline-block;
+    margin-top: 10px;
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.download-link:hover {
+    background-color: #218838;
+}
+
     </style>
 </head>
 <body>
@@ -60,18 +75,24 @@
         <nav class="sidebar">
             <ul>
                 <li><a href="admin-dashboard.html">Home</a></li>
-                <li><a href="upload-student.html" class="active">Students</a></li>
-                <li><a href="#">Parents</a></li>
+                <li><a href="upload-student.html" class="active">Upload Students Details</a></li>
                 <li><a href="location.html">Settings</a></li>
             </ul>
         </nav>
 
         <!-- Main Content -->
         <main class="main-content">
+
+          <div style="text-align: center; margin-top: 20px;">
+            <a href="sample-files/Sample.xlsx" download class="download-link">
+                📄 Download Sample Excel Format
+            </a>
+        </div>
+        
             <div class="upload-container">
                 <h2>Upload Student Excel File</h2>
                 <form id="uploadForm" enctype="multipart/form-data">
-                    <input type="file" name="file" accept=".xlsx" required>
+                    <input type="file" name="file" accept=".xlsx,.xls" required>
                     <button type="submit">Upload</button>
                 </form>
                 <p id="responseMsg"></p>
