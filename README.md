@@ -78,12 +78,18 @@ npm start
 
 ## 📸 Demo & Screenshots!
 [Login](https://github.com/user-attachments/assets/fa48defe-8447-4835-9cd2-27eefff2b5bc)
-![dashboard](https://github.com/user-attachments/assets/c58d4255-5e61-4fef-9481-488079719df6)
-![editing](https://github.com/user-attachments/assets/20d8a390-3ac0-4ef7-bbfa-8bd3d0a37ffe)
-![uploading](https://github.com/user-attachments/assets/210f1d97-ee00-4c82-917a-9fb68675d497)
-![afterAdding](https://github.com/user-attachments/assets/1f3a283b-8244-49a1-afdb-3e3278e3ff34)
-![email](https://github.com/user-attachments/assets/0ca9701c-ec97-4711-b679-258e2841f6b0)
-![openingLink](https://github.com/user-attachments/assets/76683e3e-d98d-43f7-9004-8f912088ddcb)
+
+[dashboard](https://github.com/user-attachments/assets/c58d4255-5e61-4fef-9481-488079719df6)
+
+[editing](https://github.com/user-attachments/assets/20d8a390-3ac0-4ef7-bbfa-8bd3d0a37ffe)
+
+[uploading](https://github.com/user-attachments/assets/210f1d97-ee00-4c82-917a-9fb68675d497)
+
+[afterAdding](https://github.com/user-attachments/assets/1f3a283b-8244-49a1-afdb-3e3278e3ff34)
+
+[email](https://github.com/user-attachments/assets/0ca9701c-ec97-4711-b679-258e2841f6b0)
+
+[openingLink](https://github.com/user-attachments/assets/76683e3e-d98d-43f7-9004-8f912088ddcb)
 
 
 ---
