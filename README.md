@@ -5,6 +5,13 @@ This project integrates an **ESP8266 microcontroller**, an **RFID reader**, and 
 
 ---
 
+## 🙋 Authors & Credits
+
+- Sakil Aziz
+- Sanju Kumari Gupta
+
+---
+
 ## 🚀 Features
 
 - 📶 **Wi-Fi Enabled**: ESP8266 communicates with backend over HTTP/WebSocket.
@@ -101,10 +108,3 @@ npm start
 ### 🔗 Opening Email Notification Link
 ![openingLink](https://github.com/user-attachments/assets/76683e3e-d98d-43f7-9004-8f912088ddcb)
 
-
----
-
-## 🙋 Authors & Credits
-
-- Sakil Aziz
-- Sanju Kumari Gupta
