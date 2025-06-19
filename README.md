@@ -5,7 +5,7 @@ This project integrates an **ESP8266 microcontroller**, an **RFID reader**, and 
 
 ---
 
-## 🙋 Authors & Credits
+## 🙋 Contributors
 
 - Sakil Aziz
 - Sanju Kumari Gupta
